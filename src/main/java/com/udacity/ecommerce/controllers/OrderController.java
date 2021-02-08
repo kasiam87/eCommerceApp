@@ -19,7 +19,6 @@ import com.udacity.ecommerce.model.persistence.repositories.UserRepository;
 @RequestMapping("/api/order")
 public class OrderController {
 	
-	
 	@Autowired
 	private UserRepository userRepository;
 	
