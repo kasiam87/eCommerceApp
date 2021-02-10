@@ -27,7 +27,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) {
         com.udacity.ecommerce.model.persistence.User user = userRepository.findByUsername(username);
         if (user == null) {
-            log.error("Could not find user " + username);
+            log.error("EXCEPTION: Could not find user " + username);
             throw new UsernameNotFoundException(username);
         }
         return new User(user.getUsername(), user.getPassword(), emptyList());

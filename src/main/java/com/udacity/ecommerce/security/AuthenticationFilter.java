@@ -47,7 +47,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
                             new ArrayList<>())
             );
         } catch (AuthenticationException | IOException e) {
-            log.error("Authentication failed.");
+            log.error("EXCEPTION: Authentication failed.");
             throw new RuntimeException(e);
         }
     }

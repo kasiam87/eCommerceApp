@@ -37,7 +37,7 @@ public class OrderController {
     public ResponseEntity<UserOrder> submit(@PathVariable String username) {
         User user = userRepository.findByUsername(username);
         if (user == null) {
-            log.info("Error - Could not find user with username " + username);
+            log.error("Error submitting order - Could not find user with username " + username);
             return ResponseEntity.notFound().build();
         }
         UserOrder order = UserOrder.createFromCart(user.getCart());
@@ -50,7 +50,7 @@ public class OrderController {
     public ResponseEntity<List<UserOrder>> getOrdersForUser(@PathVariable String username) {
         User user = userRepository.findByUsername(username);
         if (user == null) {
-            log.info("Error - Could not find user with username " + username);
+            log.error("Error getting orders by user - Could not find user with username " + username);
             return ResponseEntity.notFound().build();
         }
 

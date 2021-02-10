@@ -44,7 +44,7 @@ public class CartController {
     public ResponseEntity<Cart> addToCart(@RequestBody ModifyCartRequest request) {
         User user = userRepository.findByUsername(request.getUsername());
         if (user == null) {
-            log.info("Error - Could not find user with username " + request.getUsername());
+            log.error("Error - Could not find user with username " + request.getUsername());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         Optional<Item> item = itemRepository.findById(request.getItemId());
@@ -64,7 +64,7 @@ public class CartController {
     public ResponseEntity<Cart> removeFromCart(@RequestBody ModifyCartRequest request) {
         User user = userRepository.findByUsername(request.getUsername());
         if (user == null) {
-            log.info("Error - Could not find user with username " + request.getUsername());
+            log.error("Error - Could not find user with username " + request.getUsername());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         Optional<Item> item = itemRepository.findById(request.getItemId());

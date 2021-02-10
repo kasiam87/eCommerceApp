@@ -1,5 +1,6 @@
 package com.udacity.ecommerce.controllers;
 
+import org.hibernate.exception.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -47,10 +48,10 @@ public class UserController {
     public ResponseEntity<User> findByUserName(@PathVariable String username) {
         User user = userRepository.findByUsername(username);
         if (user == null) {
-            log.info("Could not find user " + username);
+            log.error("Could not find user " + username);
             return ResponseEntity.notFound().build();
         } else {
-            log.info("User retrieved successfully.");
+            log.error("User retrieved successfully.");
             return ResponseEntity.ok(user);
         }
     }
@@ -64,18 +65,23 @@ public class UserController {
         user.setCart(cart);
 
         if (createUserRequest.getPassword().length() < MIN_PASSWORD_LENGTH) {
-            log.info(String.format("Error - Password should contain at least %s characters", MIN_PASSWORD_LENGTH));
+            log.error(String.format("Error - could not create user. Password should contain at least %s characters", MIN_PASSWORD_LENGTH));
             return ResponseEntity.badRequest().build();
         }
 
         if (!createUserRequest.getPassword().equals(createUserRequest.getConfirmPassword())) {
-            log.info("Error - Password confirmation does not match");
+            log.error("Error - could not create user. Password confirmation does not match");
             return ResponseEntity.badRequest().build();
         }
 
         user.setPassword(bCryptPasswordEncoder.encode(createUserRequest.getPassword()));
 
-        userRepository.save(user);
+        try {
+            userRepository.save(user);
+        } catch (ConstraintViolationException e) {
+            log.error("EXCEPTION: could not create user");
+            return ResponseEntity.badRequest().build();
+        }
         log.info("User created successfully.");
         return ResponseEntity.ok(user);
     }
