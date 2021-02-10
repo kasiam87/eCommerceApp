@@ -40,7 +40,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                     // this disables session creation on Spring Security
                     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         } catch (Exception e) {
-            log.error("Configuration failed.");
+            log.error("EXCEPTION: Configuration failed.");
             throw e;
         }
     }
@@ -50,7 +50,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
         try {
             auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder);
         } catch (Exception e) {
-            log.error("Configuration failed.");
+            log.error("EXCEPTION: Configuration failed.");
             throw e;
         }
     }

@@ -45,7 +45,7 @@ public class AuthorizationFilter extends BasicAuthenticationFilter {
             SecurityContextHolder.getContext().setAuthentication(authentication);
             chain.doFilter(req, res);
         } catch (IOException | ServletException e) {
-            log.error("Authorization failed.");
+            log.error("EXCEPTION: Authorization failed.");
             throw new RuntimeException(e);
         }
     }
