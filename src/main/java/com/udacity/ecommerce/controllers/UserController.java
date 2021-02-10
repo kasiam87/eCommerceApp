@@ -78,7 +78,7 @@ public class UserController {
 
         try {
             userRepository.save(user);
-        } catch (ConstraintViolationException e) {
+        } catch (Exception e) {
             log.error("EXCEPTION: could not create user");
             return ResponseEntity.badRequest().build();
         }
