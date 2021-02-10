@@ -3,6 +3,8 @@ package com.udacity.ecommerce.security;
 import com.auth0.jwt.JWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.udacity.ecommerce.model.persistence.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -24,6 +26,8 @@ import static com.udacity.ecommerce.constants.SecurityConstants.TOKEN_PREFIX;
 
 public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
+    private static final Logger log = LoggerFactory.getLogger(AuthenticationFilter.class);
+
     private AuthenticationManager authenticationManager;
 
     public AuthenticationFilter(AuthenticationManager authenticationManager) {
@@ -31,7 +35,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     }
 
     @Override
-    public Authentication attemptAuthentication(HttpServletRequest req, HttpServletResponse res) throws AuthenticationException {
+    public Authentication attemptAuthentication(HttpServletRequest req, HttpServletResponse res) {
         try {
             User creds = new ObjectMapper()
                     .readValue(req.getInputStream(), User.class);
@@ -42,7 +46,8 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
                             creds.getPassword(),
                             new ArrayList<>())
             );
-        } catch (IOException e) {
+        } catch (AuthenticationException | IOException e) {
+            log.error("Authentication failed.");
             throw new RuntimeException(e);
         }
     }

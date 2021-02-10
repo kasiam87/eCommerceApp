@@ -46,7 +46,13 @@ public class UserController {
     @GetMapping("/{username}")
     public ResponseEntity<User> findByUserName(@PathVariable String username) {
         User user = userRepository.findByUsername(username);
-        return user == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(user);
+        if (user == null) {
+            log.info("Could not find user " + username);
+            return ResponseEntity.notFound().build();
+        } else {
+            log.info("User retrieved successfully.");
+            return ResponseEntity.ok(user);
+        }
     }
 
     @PostMapping("/create")
@@ -63,13 +69,14 @@ public class UserController {
         }
 
         if (!createUserRequest.getPassword().equals(createUserRequest.getConfirmPassword())) {
-            log.info("Password confirmation does not match");
+            log.info("Error - Password confirmation does not match");
             return ResponseEntity.badRequest().build();
         }
 
         user.setPassword(bCryptPasswordEncoder.encode(createUserRequest.getPassword()));
 
         userRepository.save(user);
+        log.info("User created successfully.");
         return ResponseEntity.ok(user);
     }
 
