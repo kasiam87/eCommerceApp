@@ -38,7 +38,6 @@ public class UserControllerTest {
 
     @Test
     public void createUser() {
-
         // given
         when(encoder.encode("testPassword")).thenReturn("hashedPassword");
         CreateUserRequest userRequest = new CreateUserRequest();
